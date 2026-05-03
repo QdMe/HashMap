@@ -1,1 +1,13 @@
 # HashMap
+In this project, we are going to build our implementation of the HashMap in JavaScript
+# Methods
+- **hash(key)** takes a key and produces a hash code with it.
+- **set(key**, value) takes two arguments: the first is a key, and the second is a value that is assigned to this key. 
+- **get(key)** takes one argument as a key and returns the value that is assigned to this key.
+- **has(key)** takes a key as an argument and returns true or false based on whether or not the key is in the hash map.
+- **remove(key)** takes a key as an argument. If the given key is in the hash map, it should remove the entry with that key and return true.
+- **length()** returns the number of stored keys in the hash map.  
+- **clear()**removes all entries in the hash map.
+- **keys()**returns an array containing all the keys inside the hash map.
+- **values()** returns an array containing all the values.
+- **entries()** returns an array that contains each key, value pair. Example: [[firstKey, firstValue], [secondKey, secondValue]]
