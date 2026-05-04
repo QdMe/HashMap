@@ -18,7 +18,7 @@ describe("HashMap implementation", () => {
         ),
       ).toBe(7);
     });
-    test("Reject any key that is not a string", () => {
+    test("Throw error when a non-string key is entered", () => {
       expect(() => map.hash(5)).toThrow();
     });
   });
@@ -30,6 +30,30 @@ describe("HashMap implementation", () => {
     test("Sets the value of a new key", () => {
       map.set("animals", "cat");
       expect(map.get("animals")).toBe("cat");
+    });
+    test("Updates the value of an existing-key", () => {
+      map.set("animals", "cat");
+      map.set("animals", "dog");
+      expect(map.get("animals")).toBe("dog");
+    });
+    test("Sets the value of two different keys that share the same bucket", () => {
+      map.set("Sita", "Jones");
+      map.set("Rama", "Williams");
+      expect(map.get("Sita")).toBe("Jones");
+      expect(map.get("Rama")).toBe("Williams");
+    });
+  });
+  describe("get(key) method", () => {
+    test("Returns the value of an existing key", () => {
+      map.set("fruits", "apple");
+      expect(map.get("fruits")).toBe("apple");
+    });
+    test("Returns the value of an existing key", () => {
+      map.set("animals", "cat");
+      expect(map.get("animals")).toBe("cat");
+    });
+    test("Returns null when trying to access a non-existing key", () => {
+      expect(map.get("dishes")).toBe(null);
     });
   });
 });

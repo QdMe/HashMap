@@ -32,14 +32,22 @@ class HashMap {
     let bucket = this.hash(key);
     let newNode = new Node({ key, value });
     let current = this.buckets[bucket];
-    if (current.value === null) {
+    // If the head of the bucket is null, set it to the new node
+    if (!current.value) {
       this.buckets[bucket] = newNode;
       return;
     }
+    // If the head equals the key, update its value with the new value
+    if (current.value.key === key) {
+      current.value.value = value;
+      return;
+    }
+    // Otherwise,loop over the remaining list
     while (current.nextNode) {
-      // If a key already exists in that bucket, replace its value
+      // If a key already exists in that bucket, replace its value with the new one
       if (current.value.key === key) {
         current.value.value = value;
+        return;
       }
       current = current.nextNode;
     }
@@ -50,12 +58,15 @@ class HashMap {
     // Find the correct bucket of the key
     let bucket = this.hash(key);
     let current = this.buckets[bucket];
+    // Loop over the list
     while (current.value) {
+      // If a key was found, return its value
       if (current.value.key === key) {
         return current.value.value;
       }
       current = current.nextNode;
     }
+    // Otherwise, return null
     return null;
   }
 }
@@ -64,8 +75,9 @@ let map = new HashMap();
 //   throw new Error("Trying to access index out of bounds");
 // }
 // console.log(map.buckets);
-// map.set("fruits", "apple");
-// console.log(map.get("fruits"));
+map.set("Sita", "Jones");
+map.set("Rama", "Williams");
+console.log(map.get("Rama"));
 
 // console.log(map.hash("Rama"));
 // console.log(map.hash("sita"));
