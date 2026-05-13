@@ -56,4 +56,104 @@ describe("HashMap implementation", () => {
       expect(map.get("dishes")).toBe(null);
     });
   });
+  describe("has(key) method", () => {
+    test("Returns true for a key that is in the hash-map", () => {
+      map.set("fruits", "apple");
+      expect(map.has("fruits")).toBe(true);
+    });
+    test("Returns true for a key that is in the hash-map", () => {
+      map.set("animals", "cat");
+      expect(map.has("animals")).toBe(true);
+    });
+    test("Returns false for a key that is in the hash-map", () => {
+      map.set("animals", "cat");
+      expect(map.has("city")).toBe(false);
+    });
+  });
+  describe("remove(key) method", () => {
+    test("Removes the given key from a one itemed bucket then returns true", () => {
+      map.set("animals", "cat");
+      expect(map.remove("animals")).toBe(true);
+      expect(map.get("animals")).toBe(null);
+    });
+    test("Removes the given key from a two-itemed bucket then returns true", () => {
+      map.set("Sita", "Jones");
+      map.set("Rama", "Williams");
+      expect(map.remove("Sita")).toBe(true);
+      expect(map.get("Sita")).toBe(null);
+    });
+    test("Returns falls for a key that is not in the hash map", () => {
+      expect(map.remove("countries")).toBe(false);
+    });
+  });
+  describe("length() method", () => {
+    test("Returns 1 for a single key stored in the hash map", () => {
+      map.set("fruits", "apple");
+      expect(map.length()).toBe(1);
+    });
+    test("Returns 2 for two keys stored in the hash map", () => {
+      map.set("fruits", "apple");
+      map.set("animals", "cat");
+      expect(map.length()).toBe(2);
+    });
+    test("Returns 2 for two keys that are stored in the same bucket", () => {
+      map.set("Sita", "Jones");
+      map.set("Rama", "Williams");
+      expect(map.length()).toBe(2);
+    });
+    test("Returns 3 for two keys that are stored in the same bucket and one that is not", () => {
+      map.set("Sita", "Jones");
+      map.set("Rama", "Williams");
+      map.set("animals", "cat");
+      expect(map.length()).toBe(3);
+    });
+    test("Returns 0 for an empty hash map", () => {
+      expect(map.length()).toBe(0);
+    });
+  });
+  describe("clear() method", () => {
+    test("Remove the single entry from the hash map", () => {
+      map.set("fruits", "apple");
+      map.clear();
+      expect(map.length()).toBe(0);
+    });
+    test("Remove all two entries from the hash map", () => {
+      map.set("Sita", "Jones");
+      map.set("Rama", "Williams");
+      map.clear();
+      expect(map.length()).toBe(0);
+    });
+    test("Remove all three entries from the hash map", () => {
+      map.set("fruits", "apple");
+      map.set("Sita", "Jones");
+      map.set("Rama", "Williams");
+      map.clear();
+      expect(map.length()).toBe(0);
+    });
+  });
+  describe("keys() method", () => {
+    test("Return the only key in the hash map", () => {
+      map.set("fruits", "apple");
+      expect(map.keys()).toEqual(["fruits"]);
+    });
+    test("Return the only key in the hash map", () => {
+      map.set("animals", "cat");
+      expect(map.keys()).toEqual(["animals"]);
+    });
+    test("Return all the two keys in the hash map", () => {
+      map.set("fruits", "apple");
+      map.set("animals", "cat");
+      expect(map.keys()).toEqual(["animals", "fruits"]);
+    });
+    test("Return all the four keys in the hash map", () => {
+      map.set("fruits", "apple");
+      map.set("animals", "cat");
+      map.set("Sita", "Jones");
+      map.set("Rama", "Williams");
+      map.set("Car", "Toyota");
+      expect(map.keys()).toEqualIgnoreOrder([
+        ("Sita", "Rama", "Car", "animals", "fruits"),
+      ]);
+    });
+  });
 });

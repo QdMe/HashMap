@@ -28,7 +28,7 @@ class HashMap {
   }
 
   set(key, value) {
-    // Find the correct bucket of the key
+    // Find the correct bucket for the given key
     let bucket = this.hash(key);
     let newNode = new Node({ key, value });
     let current = this.buckets[bucket];
@@ -44,7 +44,7 @@ class HashMap {
     }
     // Otherwise,loop over the remaining list
     while (current.nextNode) {
-      // If a key already exists in that bucket, replace its value with the new one
+      // If the key already exists in that bucket, replace its value with the new one
       if (current.value.key === key) {
         current.value.value = value;
         return;
@@ -58,29 +58,106 @@ class HashMap {
     // Find the correct bucket of the key
     let bucket = this.hash(key);
     let current = this.buckets[bucket];
-    // Loop over the list
-    while (current.value) {
-      // If a key was found, return its value
-      if (current.value.key === key) {
-        return current.value.value;
+    try {
+      // Loop over the list
+      while (current) {
+        // If a key was found, return its value
+        if (current.value.key === key) {
+          return current.value.value;
+        }
+        current = current.nextNode;
       }
+      // Otherwise, return null
+      return null;
+    } catch (error) {
+      return null;
+    }
+  }
+  has(key) {
+    // Find the correct bucket of the key
+    let bucket = this.hash(key);
+    let current = this.buckets[bucket];
+    // Search the nodes of this bucket
+    while (current.value) {
+      if (current.value.key === key) return true;
       current = current.nextNode;
     }
-    // Otherwise, return null
-    return null;
+    return false;
+  }
+  remove(key) {
+    // Find the correct bucket of the key
+    let bucket = this.hash(key);
+    let current = this.buckets[bucket];
+    // If the bucket is empty => return false
+    if (!current.value) return false;
+    // If it's the only item => reset node
+    if (!current.nextNode) {
+      this.buckets[bucket] = new Node();
+      return true;
+    }
+    // If it's the head of a more than one item list => point the head to the second item
+    if (current.value.key === key) {
+      this.buckets[bucket] = current.nextNode;
+      return true;
+    }
+    // If it's not the head => before point to after
+    while (current.nextNode) {
+      if (current.value.key === key) {
+        let itemBefore = current;
+        let itemAfter = current.nextNode.nextNode;
+        itemBefore.nextNode = itemAfter;
+        return true;
+      }
+    }
+    current = current.nextNode;
+  }
+  length() {
+    let count = 0;
+    // Loop over the buckets in the hash map
+    this.buckets.forEach((bucket) => {
+      // If there is only an item
+      if (bucket.value && !bucket.nextNode) {
+        count++;
+      } else {
+        // Else, loop over the bucket until current is equal to null
+        let current = bucket;
+        try {
+          while (current.value) {
+            count++;
+            current = current.nextNode;
+          }
+        } catch (e) {}
+      }
+    });
+    return count;
+  }
+  clear() {
+    this.buckets = [...this.setBuckets(this.capacity)];
+  }
+  keys() {
+    let keys = [];
+    // Loop over the hash map
+    this.buckets.forEach((bucket) => {
+      // If the head of the bucket is not empty
+      if (bucket.value) {
+        let current = bucket;
+        // Loop over the items of the bucket
+        try {
+          while (current.value) {
+            keys.push(current.value.key);
+            // Push the key to keys
+            current = current.nextNode;
+          }
+        } catch (e) {}
+      }
+    });
+    return keys;
   }
 }
-let map = new HashMap();
-// if (index < 0 || index >= buckets.length) {
-//   throw new Error("Trying to access index out of bounds");
-// }
-// console.log(map.buckets);
-map.set("Sita", "Jones");
-map.set("Rama", "Williams");
-console.log(map.get("Rama"));
-
-// console.log(map.hash("Rama"));
-// console.log(map.hash("sita"));
-// console.log(map.hash("hello"));
-
+// let map = new HashMap();
+// map.set("Sita", "name");
+// map.set("Rama", "name");
+// map.set("fruits", "apple");
+// map.set("animals", "cat");
+// console.log(map.keys());
 export default HashMap;
