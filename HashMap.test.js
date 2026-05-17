@@ -151,9 +151,38 @@ describe("HashMap implementation", () => {
       map.set("Sita", "Jones");
       map.set("Rama", "Williams");
       map.set("Car", "Toyota");
-      expect(map.keys()).toEqualIgnoreOrder([
-        ("Sita", "Rama", "Car", "animals", "fruits"),
-      ]);
+      expect(map.keys()).toEqual(
+        expect.arrayContaining(["Sita", "Rama", "Car", "animals", "fruits"]),
+      );
+      expect(map.keys()).toHaveLength(5);
+    });
+  });
+  describe("values() method", () => {
+    test("Returns the value of the only value in the hash map", () => {
+      map.set("fruits", "apple");
+      expect(map.values()).toEqual(["apple"]);
+    });
+    test("Returns the value of the only value in the hash map", () => {
+      map.set("animal", "cat");
+      expect(map.values()).toEqual(["cat"]);
+    });
+    test("Return all the two values in the hash map", () => {
+      map.set("fruits", "apple");
+      map.set("animals", "cat");
+      // Sort the values because hash maps don't care about order
+      let sorted = map.values().sort();
+      expect(sorted).toEqual(["apple", "cat"]);
+    });
+    test("Return all the four values in the hash map", () => {
+      map.set("fruits", "apple");
+      map.set("animals", "cat");
+      map.set("Sita", "Jones");
+      map.set("Rama", "Williams");
+      map.set("Car", "Toyota");
+      expect(map.values()).toEqual(
+        expect.arrayContaining(["apple", "cat", "Jones", "Williams", "Toyota"]),
+      );
+      expect(map.values()).toHaveLength(5);
     });
   });
 });

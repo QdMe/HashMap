@@ -153,11 +153,30 @@ class HashMap {
     });
     return keys;
   }
+  values() {
+    let values = [];
+    // Loop over the hash map
+    this.buckets.forEach((bucket) => {
+      // If the head of the bucket is not empty
+      if (bucket.value) {
+        let current = bucket;
+        // Loop over the items of the bucket
+        try {
+          while (current.value) {
+            values.push(current.value.value);
+            // Push the key to values
+            current = current.nextNode;
+          }
+        } catch (e) {}
+      }
+    });
+    return values;
+  }
 }
 // let map = new HashMap();
 // map.set("Sita", "name");
 // map.set("Rama", "name");
 // map.set("fruits", "apple");
 // map.set("animals", "cat");
-// console.log(map.keys());
+
 export default HashMap;
