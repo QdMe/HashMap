@@ -28,13 +28,23 @@ class HashMap {
   }
 
   set(key, value) {
+    let loadFactor = this.length() / this.capacity;
+    // If the load factor is more than 0.75
+    if (loadFactor >= this.loadFactor) {
+      // Double the capacity
+      this.capacity *= 2;
+    }
     // Find the correct bucket for the given key
     let bucket = this.hash(key);
     let newNode = new Node({ key, value });
     let current = this.buckets[bucket];
     // If the head of the bucket is null, set it to the new node
-    if (!current.value) {
-      this.buckets[bucket] = newNode;
+    try {
+      if (!current.value) {
+        this.buckets[bucket] = newNode;
+        return;
+      }
+    } catch (e) {
       return;
     }
     // If the head equals the key, update its value with the new value
@@ -51,8 +61,17 @@ class HashMap {
       }
       current = current.nextNode;
     }
+    // elephant - moon
     // Otherwise save the key-value pair in that bucket
+    if (current.value.key === key) {
+      current.value.value = value;
+      return;
+    }
     current.nextNode = newNode;
+
+    // if the first item is not our item
+    // and the second item is empty
+    // point the first item to newNode
   }
   get(key) {
     // Find the correct bucket of the key
@@ -172,11 +191,28 @@ class HashMap {
     });
     return values;
   }
+  entries() {
+    let pairs = [];
+    // Loop over the hash map
+    this.buckets.forEach((bucket) => {
+      // If the head of the bucket is not empty
+      if (bucket.value) {
+        let current = bucket;
+        // Loop over the items of the bucket
+        try {
+          while (current.value) {
+            let pair = [];
+            pair.push(current.value.key);
+            pair.push(current.value.value);
+            // Push the pair to pairs
+            pairs.push(pair);
+            current = current.nextNode;
+          }
+        } catch (e) {}
+      }
+    });
+    return pairs;
+  }
 }
-// let map = new HashMap();
-// map.set("Sita", "name");
-// map.set("Rama", "name");
-// map.set("fruits", "apple");
-// map.set("animals", "cat");
 
 export default HashMap;

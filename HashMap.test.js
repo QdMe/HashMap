@@ -36,11 +36,52 @@ describe("HashMap implementation", () => {
       map.set("animals", "dog");
       expect(map.get("animals")).toBe("dog");
     });
+
     test("Sets the value of two different keys that share the same bucket", () => {
       map.set("Sita", "Jones");
       map.set("Rama", "Williams");
       expect(map.get("Sita")).toBe("Jones");
       expect(map.get("Rama")).toBe("Williams");
+    });
+    test("Updates the value of an existing-key that shares a bucket with another key", () => {
+      map.set("elephant", "gray");
+      map.set("moon", "silver");
+      map.set("moon", "gold");
+      expect(map.get("moon")).toBe("gold");
+    });
+    test("Doubles the capacity when the load factor exceeds 0.75", () => {
+      map.set("apple", "red");
+      map.set("banana", "yellow");
+      map.set("carrot", "orange");
+      map.set("dog", "brown");
+      map.set("elephant", "gray");
+      map.set("frog", "green");
+      map.set("grape", "purple");
+      map.set("hat", "black");
+      map.set("ice cream", "white");
+      map.set("jacket", "blue");
+      map.set("kite", "pink");
+      map.set("lion", "golden");
+      map.set("moon", "silver");
+      expect(map.capacity).toBe(32);
+    });
+    test("Overwriting existing items should not increase the number of items in the hash map", () => {
+      map.set("apple", "red");
+      map.set("banana", "yellow");
+      map.set("carrot", "orange");
+      map.set("dog", "brown");
+      map.set("elephant", "gray");
+      map.set("frog", "green");
+      map.set("grape", "purple");
+      map.set("hat", "black");
+      map.set("ice cream", "white");
+      map.set("jacket", "blue");
+      map.set("kite", "pink");
+      map.set("lion", "golden");
+      // Overwrite moon
+      map.set("moon", "silver");
+      map.set("moon", "gold");
+      expect(map.length()).toBe(13);
     });
   });
   describe("get(key) method", () => {
@@ -183,6 +224,36 @@ describe("HashMap implementation", () => {
         expect.arrayContaining(["apple", "cat", "Jones", "Williams", "Toyota"]),
       );
       expect(map.values()).toHaveLength(5);
+    });
+    describe("entries() method", () => {
+      test("Returns an array that contains the only key-value pair in the hash map", () => {
+        map.set("fruits", "apple");
+        expect(map.entries()).toEqual([["fruits", "apple"]]);
+      });
+      test("Returns an array that contains the two key-value pairs in the hash map", () => {
+        map.set("fruits", "apple");
+        map.set("animal", "cat");
+        let sorted = map.entries().sort();
+        expect(sorted).toEqual([
+          ["animal", "cat"],
+          ["fruits", "apple"],
+        ]);
+      });
+      test("Returns an array that contains all the key-value pairs in the hash map", () => {
+        map.set("Fruits", "Apple");
+        map.set("Animals", "Cat");
+        map.set("Sita", "Jones");
+        map.set("Rama", "Williams");
+        map.set("Car", "Toyota");
+        let sorted = map.entries().sort();
+        expect(sorted).toEqual([
+          ["Animals", "Cat"],
+          ["Car", "Toyota"],
+          ["Fruits", "Apple"],
+          ["Rama", "Williams"],
+          ["Sita", "Jones"],
+        ]);
+      });
     });
   });
 });
